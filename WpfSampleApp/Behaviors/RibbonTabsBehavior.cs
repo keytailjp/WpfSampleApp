@@ -9,20 +9,28 @@ using Microsoft.Xaml.Behaviors;
 using Prism.Regions;
 
 using WpfSampleApp.Constants;
-using WpfSampleApp.Models;
 
 namespace WpfSampleApp.Behaviors;
 
 // See how to add new Tabs and new groups in Home Tab from your pages https://github.com/microsoft/TemplateStudio/blob/main/docs/WPF/projectTypes/ribbon.md
 public class RibbonTabsBehavior : Behavior<Ribbon>
 {
-    private IRegionManager _regionManager;
+    public static readonly DependencyProperty IsGroupFromPageProperty =
+        DependencyProperty.RegisterAttached("IsGroupFromPage", typeof(bool), typeof(RibbonGroupBox), new PropertyMetadata(false));
 
     public static readonly DependencyProperty IsHomeTabProperty = DependencyProperty.RegisterAttached(
         "IsHomeTab", typeof(bool), typeof(RibbonTabsBehavior), new PropertyMetadata(default(bool)));
 
-    public static void SetIsHomeTab(DependencyObject element, bool value)
-        => element.SetValue(IsHomeTabProperty, value);
+    public static readonly DependencyProperty IsTabFromPageProperty =
+        DependencyProperty.RegisterAttached("IsTabFromPage", typeof(bool), typeof(RibbonTabItem), new PropertyMetadata(false));
+
+    public static readonly DependencyProperty PageConfigurationProperty =
+        DependencyProperty.Register("PageConfiguration", typeof(RibbonPageConfiguration), typeof(UserControl), new PropertyMetadata(new RibbonPageConfiguration()));
+
+    private IRegionManager _regionManager;
+
+    public static bool GetIsGroupFromPage(RibbonGroupBox item)
+        => (bool)item.GetValue(IsGroupFromPageProperty);
 
     public static bool GetIsHomeTab(DependencyObject element)
         => (bool)element.GetValue(IsHomeTabProperty);
@@ -30,29 +38,20 @@ public class RibbonTabsBehavior : Behavior<Ribbon>
     public static bool GetIsTabFromPage(RibbonTabItem item)
         => (bool)item.GetValue(IsTabFromPageProperty);
 
-    public static void SetIsTabFromPage(RibbonTabItem item, bool value)
-        => item.SetValue(IsTabFromPageProperty, value);
-
-    public static readonly DependencyProperty IsTabFromPageProperty =
-        DependencyProperty.RegisterAttached("IsTabFromPage", typeof(bool), typeof(RibbonTabItem), new PropertyMetadata(false));
-
-    public static bool GetIsGroupFromPage(RibbonGroupBox item)
-        => (bool)item.GetValue(IsGroupFromPageProperty);
+    public static RibbonPageConfiguration GetPageConfiguration(UserControl item)
+        => (RibbonPageConfiguration)item.GetValue(PageConfigurationProperty);
 
     public static void SetIsGroupFromPage(RibbonGroupBox item, bool value)
         => item.SetValue(IsGroupFromPageProperty, value);
 
-    public static readonly DependencyProperty IsGroupFromPageProperty =
-        DependencyProperty.RegisterAttached("IsGroupFromPage", typeof(bool), typeof(RibbonGroupBox), new PropertyMetadata(false));
+    public static void SetIsHomeTab(DependencyObject element, bool value)
+                            => element.SetValue(IsHomeTabProperty, value);
 
-    public static RibbonPageConfiguration GetPageConfiguration(UserControl item)
-        => (RibbonPageConfiguration)item.GetValue(PageConfigurationProperty);
+    public static void SetIsTabFromPage(RibbonTabItem item, bool value)
+        => item.SetValue(IsTabFromPageProperty, value);
 
     public static void SetPageConfiguration(UserControl item, RibbonPageConfiguration value)
         => item.SetValue(PageConfigurationProperty, value);
-
-    public static readonly DependencyProperty PageConfigurationProperty =
-        DependencyProperty.Register("PageConfiguration", typeof(RibbonPageConfiguration), typeof(UserControl), new PropertyMetadata(new RibbonPageConfiguration()));
 
     public void Initialize(IRegionManager regionManager)
     {
@@ -71,16 +70,6 @@ public class RibbonTabsBehavior : Behavior<Ribbon>
     {
         var page = _regionManager.Regions[Regions.Main].ActiveViews.First() as UserControl;
         UpdateTabs(page);
-    }
-
-    private void UpdateTabs(UserControl page)
-    {
-        if (page != null)
-        {
-            var config = GetPageConfiguration(page);
-            SetupHomeGroups(config.HomeGroups);
-            SetupTabs(config.Tabs);
-        }
     }
 
     private void SetupHomeGroups(Collection<RibbonGroupBox> homeGroups)
@@ -122,6 +111,16 @@ public class RibbonTabsBehavior : Behavior<Ribbon>
             {
                 AssociatedObject.Tabs.Add(tab);
             }
+        }
+    }
+
+    private void UpdateTabs(UserControl page)
+    {
+        if (page != null)
+        {
+            var config = GetPageConfiguration(page);
+            SetupHomeGroups(config.HomeGroups);
+            SetupTabs(config.Tabs);
         }
     }
 }

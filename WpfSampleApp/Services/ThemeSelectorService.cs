@@ -18,6 +18,18 @@ public class ThemeSelectorService : IThemeSelectorService
     {
     }
 
+    public AppTheme GetCurrentTheme()
+    {
+        if (App.Current.Properties.Contains("Theme"))
+        {
+            var themeName = App.Current.Properties["Theme"].ToString();
+            Enum.TryParse(themeName, out AppTheme theme);
+            return theme;
+        }
+
+        return AppTheme.Default;
+    }
+
     public void InitializeTheme()
     {
         // TODO: Mahapps.Metro supports syncronization with high contrast but you have to provide custom high contrast themes
@@ -45,17 +57,5 @@ public class ThemeSelectorService : IThemeSelectorService
         }
 
         App.Current.Properties["Theme"] = theme.ToString();
-    }
-
-    public AppTheme GetCurrentTheme()
-    {
-        if (App.Current.Properties.Contains("Theme"))
-        {
-            var themeName = App.Current.Properties["Theme"].ToString();
-            Enum.TryParse(themeName, out AppTheme theme);
-            return theme;
-        }
-
-        return AppTheme.Default;
     }
 }

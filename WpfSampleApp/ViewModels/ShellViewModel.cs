@@ -13,19 +13,19 @@ public class ShellViewModel : BindableBase
 {
     private readonly IRegionManager _regionManager;
     private readonly IRightPaneService _rightPaneService;
-    private IRegionNavigationService _navigationService;
     private ICommand _loadedCommand;
+    private IRegionNavigationService _navigationService;
     private ICommand _unloadedCommand;
-
-    public ICommand LoadedCommand => _loadedCommand ?? (_loadedCommand = new DelegateCommand(OnLoaded));
-
-    public ICommand UnloadedCommand => _unloadedCommand ?? (_unloadedCommand = new DelegateCommand(OnUnloaded));
 
     public ShellViewModel(IRegionManager regionManager, IRightPaneService rightPaneService)
     {
         _regionManager = regionManager;
         _rightPaneService = rightPaneService;
     }
+
+    public ICommand LoadedCommand => _loadedCommand ?? (_loadedCommand = new DelegateCommand(OnLoaded));
+
+    public ICommand UnloadedCommand => _unloadedCommand ?? (_unloadedCommand = new DelegateCommand(OnUnloaded));
 
     private void OnLoaded()
     {

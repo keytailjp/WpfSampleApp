@@ -9,8 +9,8 @@ namespace WpfSampleApp.Services;
 
 public class PersistAndRestoreService : IPersistAndRestoreService
 {
-    private readonly IFileService _fileService;
     private readonly AppConfig _appConfig;
+    private readonly IFileService _fileService;
     private readonly string _localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
 
     public PersistAndRestoreService(IFileService fileService, AppConfig appConfig)

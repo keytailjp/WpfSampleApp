@@ -13,13 +13,25 @@ namespace WpfSampleApp.ViewModels;
 public class SettingsViewModel : BindableBase, INavigationAware
 {
     private readonly AppConfig _appConfig;
-    private readonly IThemeSelectorService _themeSelectorService;
-    private readonly ISystemService _systemService;
     private readonly IApplicationInfoService _applicationInfoService;
+    private readonly ISystemService _systemService;
+    private readonly IThemeSelectorService _themeSelectorService;
+    private ICommand _privacyStatementCommand;
+    private ICommand _setThemeCommand;
     private AppTheme _theme;
     private string _versionDescription;
-    private ICommand _setThemeCommand;
-    private ICommand _privacyStatementCommand;
+
+    public SettingsViewModel(AppConfig appConfig, IThemeSelectorService themeSelectorService, ISystemService systemService, IApplicationInfoService applicationInfoService)
+    {
+        _appConfig = appConfig;
+        _themeSelectorService = themeSelectorService;
+        _systemService = systemService;
+        _applicationInfoService = applicationInfoService;
+    }
+
+    public ICommand PrivacyStatementCommand => _privacyStatementCommand ?? (_privacyStatementCommand = new DelegateCommand(OnPrivacyStatement));
+
+    public ICommand SetThemeCommand => _setThemeCommand ?? (_setThemeCommand = new DelegateCommand<string>(OnSetTheme));
 
     public AppTheme Theme
     {
@@ -33,16 +45,11 @@ public class SettingsViewModel : BindableBase, INavigationAware
         set { SetProperty(ref _versionDescription, value); }
     }
 
-    public ICommand SetThemeCommand => _setThemeCommand ?? (_setThemeCommand = new DelegateCommand<string>(OnSetTheme));
+    public bool IsNavigationTarget(NavigationContext navigationContext)
+        => true;
 
-    public ICommand PrivacyStatementCommand => _privacyStatementCommand ?? (_privacyStatementCommand = new DelegateCommand(OnPrivacyStatement));
-
-    public SettingsViewModel(AppConfig appConfig, IThemeSelectorService themeSelectorService, ISystemService systemService, IApplicationInfoService applicationInfoService)
+    public void OnNavigatedFrom(NavigationContext navigationContext)
     {
-        _appConfig = appConfig;
-        _themeSelectorService = themeSelectorService;
-        _systemService = systemService;
-        _applicationInfoService = applicationInfoService;
     }
 
     public void OnNavigatedTo(NavigationContext navigationContext)
@@ -51,19 +58,12 @@ public class SettingsViewModel : BindableBase, INavigationAware
         Theme = _themeSelectorService.GetCurrentTheme();
     }
 
-    public void OnNavigatedFrom(NavigationContext navigationContext)
-    {
-    }
+    private void OnPrivacyStatement()
+        => _systemService.OpenInWebBrowser(_appConfig.PrivacyStatement);
 
     private void OnSetTheme(string themeName)
     {
         var theme = (AppTheme)Enum.Parse(typeof(AppTheme), themeName);
         _themeSelectorService.SetTheme(theme);
     }
-
-    private void OnPrivacyStatement()
-        => _systemService.OpenInWebBrowser(_appConfig.PrivacyStatement);
-
-    public bool IsNavigationTarget(NavigationContext navigationContext)
-        => true;
 }

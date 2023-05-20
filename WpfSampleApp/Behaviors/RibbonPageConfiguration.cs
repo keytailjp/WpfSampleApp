@@ -10,13 +10,13 @@ namespace WpfSampleApp.Behaviors;
 
 public class RibbonPageConfiguration
 {
-    public Collection<RibbonGroupBox> HomeGroups { get; set; } = new Collection<RibbonGroupBox>();
-
-    public Collection<RibbonTabItem> Tabs { get; set; } = new Collection<RibbonTabItem>();
-
     public RibbonPageConfiguration()
     {
     }
+
+    public Collection<RibbonGroupBox> HomeGroups { get; set; } = new Collection<RibbonGroupBox>();
+
+    public Collection<RibbonTabItem> Tabs { get; set; } = new Collection<RibbonTabItem>();
 
     public void SetDataContext(BindableBase viewModel, BindingMode bindingMode = BindingMode.OneWay)
     {

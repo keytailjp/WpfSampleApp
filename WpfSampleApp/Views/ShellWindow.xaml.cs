@@ -1,11 +1,7 @@
 ﻿using System.Windows;
-
 using Fluent;
-
 using MahApps.Metro.Controls;
-
 using Prism.Regions;
-
 using WpfSampleApp.Constants;
 using WpfSampleApp.Contracts.Services;
 
@@ -13,15 +9,14 @@ namespace WpfSampleApp.Views;
 
 public partial class ShellWindow : MetroWindow, IRibbonWindow
 {
-    public RibbonTitleBar TitleBar
+    public static readonly DependencyProperty TitleBarProperty;
+    private static readonly DependencyPropertyKey TitleBarPropertyKey;
+
+    static ShellWindow()
     {
-        get => (RibbonTitleBar)GetValue(TitleBarProperty);
-        private set => SetValue(TitleBarPropertyKey, value);
+        TitleBarPropertyKey = DependencyProperty.RegisterReadOnly(nameof(TitleBar), typeof(RibbonTitleBar), typeof(ShellWindow), new PropertyMetadata());
+        TitleBarProperty = TitleBarPropertyKey.DependencyProperty;
     }
-
-    private static readonly DependencyPropertyKey TitleBarPropertyKey = DependencyProperty.RegisterReadOnly(nameof(TitleBar), typeof(RibbonTitleBar), typeof(ShellWindow), new PropertyMetadata());
-
-    public static readonly DependencyProperty TitleBarProperty = TitleBarPropertyKey.DependencyProperty;
 
     public ShellWindow(IRegionManager regionManager, IRightPaneService rightPaneService)
     {
@@ -31,6 +26,12 @@ public partial class ShellWindow : MetroWindow, IRibbonWindow
         rightPaneService.Initialize(splitView, rightPaneContentControl);
         navigationBehavior.Initialize(regionManager);
         tabsBehavior.Initialize(regionManager);
+    }
+
+    public RibbonTitleBar TitleBar
+    {
+        get => (RibbonTitleBar)GetValue(TitleBarProperty);
+        private set => SetValue(TitleBarPropertyKey, value);
     }
 
     private void OnLoaded(object sender, RoutedEventArgs e)

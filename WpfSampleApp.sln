@@ -7,6 +7,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpfSampleApp", "WpfSampleAp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpfSampleApp.Core", "WpfSampleApp.Core\WpfSampleApp.Core.csproj", "{6D86283E-F1C7-4FA8-ABED-F99AEEE34897}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{D31E2572-B63C-418F-A609-739E0FAC2EE6}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
+		CodeMaid.config = CodeMaid.config
+		dotnetformat.ps1 = dotnetformat.ps1
+		LICENSE.txt = LICENSE.txt
+		THIRD-PARTY-NOTICES.txt = THIRD-PARTY-NOTICES.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

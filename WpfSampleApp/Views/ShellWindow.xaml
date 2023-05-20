@@ -2,21 +2,21 @@
     x:Class="WpfSampleApp.Views.ShellWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
-    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-    xmlns:properties="clr-namespace:WpfSampleApp.Properties"
-    xmlns:behaviors="clr-namespace:WpfSampleApp.Behaviors"
     xmlns:Fluent="urn:fluent-ribbon"
-    ShowSystemMenuOnRightClick="False"
-    Loaded="OnLoaded"
-    Unloaded="OnUnloaded"
-    Style="{StaticResource CustomMetroWindow}"
-    mc:Ignorable="d"
+    xmlns:behaviors="clr-namespace:WpfSampleApp.Behaviors"
+    xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:properties="clr-namespace:WpfSampleApp.Properties"
+    Title="{x:Static properties:Resources.AppDisplayName}"
     MinWidth="500"
     MinHeight="350"
-    Title="{x:Static properties:Resources.AppDisplayName}">
+    Loaded="OnLoaded"
+    ShowSystemMenuOnRightClick="False"
+    Style="{StaticResource CustomMetroWindow}"
+    Unloaded="OnUnloaded"
+    mc:Ignorable="d">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding LoadedCommand}" />
@@ -27,9 +27,7 @@
     </i:Interaction.Triggers>
     <controls:MetroWindow.TitleTemplate>
         <DataTemplate>
-            <Fluent:RibbonTitleBar
-                x:Name="RibbonTitleBar"
-                Header="{Binding Path=Title, RelativeSource={RelativeSource AncestorType=controls:MetroWindow}}" />
+            <Fluent:RibbonTitleBar x:Name="RibbonTitleBar" Header="{Binding Path=Title, RelativeSource={RelativeSource AncestorType=controls:MetroWindow}}" />
         </DataTemplate>
     </controls:MetroWindow.TitleTemplate>
 
@@ -40,16 +38,14 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Fluent:Ribbon x:Name="ribbonControl" Grid.Row="0">
-                <!--Backstage-->
+                <!--  Backstage  -->
                 <Fluent:Ribbon.Menu>
                     <Fluent:Backstage UseHighestAvailableAdornerLayer="False">
                         <Fluent:BackstageTabControl x:Name="backstageTabControl" SelectedContentMargin="0">
                             <i:Interaction.Behaviors>
                                 <behaviors:BackstageTabNavigationBehavior x:Name="navigationBehavior" />
                             </i:Interaction.Behaviors>
-                            <Fluent:BackstageTabItem
-                                Tag="Settings"
-                                Header="{x:Static properties:Resources.ShellPageRibbonBackstageTabSettingsHeader}" />
+                            <Fluent:BackstageTabItem Header="{x:Static properties:Resources.ShellPageRibbonBackstageTabSettingsHeader}" Tag="Settings" />
                         </Fluent:BackstageTabControl>
                     </Fluent:Backstage>
                 </Fluent:Ribbon.Menu>
@@ -58,40 +54,34 @@
                     <behaviors:RibbonTabsBehavior x:Name="tabsBehavior" />
                 </i:Interaction.Behaviors>
 
-                <!--Tabs-->
+                <!--  Tabs  -->
                 <Fluent:RibbonTabItem
                     Fluent:KeyTip="A"
                     behaviors:RibbonTabsBehavior.IsHomeTab="True"
                     Header="{x:Static properties:Resources.ShellPageRibbonTabHomeHeader}">
                     <Fluent:RibbonGroupBox
-                        State="Large"
                         MinWidth="150"
-                        Header="{x:Static properties:Resources.ShellPageRibbonHomeGroupCommon1Header}">
-                    </Fluent:RibbonGroupBox>
+                        Header="{x:Static properties:Resources.ShellPageRibbonHomeGroupCommon1Header}"
+                        State="Large" />
                     <Fluent:RibbonGroupBox
-                        State="Middle"
                         MinWidth="150"
-                        Header="{x:Static properties:Resources.ShellPageRibbonHomeGroupCommon2Header}">
-                    </Fluent:RibbonGroupBox>
+                        Header="{x:Static properties:Resources.ShellPageRibbonHomeGroupCommon2Header}"
+                        State="Middle" />
                 </Fluent:RibbonTabItem>
             </Fluent:Ribbon>
             <controls:SplitView
-                Grid.Row="1"
                 x:Name="splitView"
-                PanePlacement="Right"
+                Grid.Row="1"
+                Focusable="False"
                 OpenPaneLength="400"
-                Focusable="False">
+                PanePlacement="Right">
                 <controls:SplitView.Pane>
-                    <Border
-                        BorderThickness="1,1,0,0"
-                        BorderBrush="{DynamicResource MahApps.Brushes.Controls.Border}">
-                        <ContentControl
-                            x:Name="rightPaneContentControl" />
+                    <Border BorderBrush="{DynamicResource MahApps.Brushes.Controls.Border}" BorderThickness="1,1,0,0">
+                        <ContentControl x:Name="rightPaneContentControl" />
                     </Border>
                 </controls:SplitView.Pane>
                 <controls:SplitView.Content>
-                    <ContentControl
-                        x:Name="menuContentControl" />
+                    <ContentControl x:Name="menuContentControl" />
                 </controls:SplitView.Content>
             </controls:SplitView>
         </Grid>
